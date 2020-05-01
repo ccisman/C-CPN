@@ -17,4 +17,4 @@ The c program must satisfy ANSI-C grammar.
 * rg_sliceOnly_dirname : indicate the direction of the output reachable graph.
 
 - During the running of our project, it will read the files in the direction indicated by 'origin_dirname', and do preprocessing, putting those files after preprocessing in the direction indicated by newfile_dirname. After creating the RG(reachable graph), it will output the RG in the direction indicated by rg_sliceOnly_dirname and calculate the time using to build CPN and RG.
-- In our project, there also
+- In our project, we use Graphviz to show the picture of CPN. So you should install Graphviz first.
