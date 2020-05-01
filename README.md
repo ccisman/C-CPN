@@ -1,4 +1,4 @@
-# C-CPN
+# PDNet
 an aotumatic tool for modeling and slicing
 
 This project is a tool for building a CPN model of c program, and alleviate the state space with slicing.
