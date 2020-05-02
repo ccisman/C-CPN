@@ -1001,9 +1001,34 @@ string operate_modify_declare(C_Petri &petri, Mapping m, pair<int, int> add)
 		return new_place;*/
 }
 
+enum { ADD, DEL };
 
+void adjust_changes(AST_change &change, int flag, int position)
+{
+	if (flag == ADD)
+	{
+		for (unsigned int i = 0; i < change.del.size(); i++)
+		{
+			if (change.del[i].first > position)
+				change.del[i].first++;
+		}
+		for (unsigned int i = 0; i < change.move.size(); i++)
+		{
+			if (change.move[i].first > position)
+				change.move[i].first++;
+		}
+	}
+	else
+	{
+		for (unsigned int i = 0; i < change.move.size(); i++)
+		{
+			if (change.move[i].first > position)
+				change.move[i].first--;
+		}
+	}
+}
 
-vector<string> evolution(C_Petri &petri, vector<AST_change> changes)//t1,t2´ú±íÁ½¿ÃÓï·¨Ê÷¸ù½Úµã
+vector<string> evolution(C_Petri &petri, vector<AST_change> &changes)//t1,t2´ú±íÁ½¿ÃÓï·¨Ê÷¸ù½Úµã
 {
 	vector<string> change_P;
 	vector<string> temp_P;
@@ -1011,21 +1036,21 @@ vector<string> evolution(C_Petri &petri, vector<AST_change> changes)//t1,t2´ú±íÁ
 	{
 		if (changes[i].m.map1->type == DECLARATION_LIST)
 		{
-		string temp_P1;
-		for (unsigned int j = 0; j < changes[i].modify.size(); j++)
-		{
+			string temp_P1;
+			for (unsigned int j = 0; j < changes[i].modify.size(); j++)
+			{
 
-			temp_P1 = operate_modify_declare(petri, changes[i].m, changes[i].modify[j]);
-			//change_P.insert(change_P.end(), temp_P.begin(), temp_P.end());
-			change_P.push_back(temp_P1);
-		}
-		for (unsigned int j = 0; j < changes[i].add.size(); j++)
-		{
-			temp_P1 = operate_add_declare(petri, changes[i].m, changes[i].add[j]);
-			//change_P.insert(change_P.end(), temp_P.begin(), temp_P.end());
-			change_P.push_back(temp_P1);
+				temp_P1 = operate_modify_declare(petri, changes[i].m, changes[i].modify[j]);
+				//change_P.insert(change_P.end(), temp_P.begin(), temp_P.end());
+				change_P.push_back(temp_P1);
+			}
+			for (unsigned int j = 0; j < changes[i].add.size(); j++)
+			{
+				temp_P1 = operate_add_declare(petri, changes[i].m, changes[i].add[j]);
+				//change_P.insert(change_P.end(), temp_P.begin(), temp_P.end());
+				change_P.push_back(temp_P1);
 
-		}
+			}
 		}
 	}
 	
@@ -1035,26 +1060,28 @@ vector<string> evolution(C_Petri &petri, vector<AST_change> changes)//t1,t2´ú±íÁ
 		//vector<int> add_num,del_num;
 		if (changes[i].m.map1->type == STATEMENT_LIST)
 		{
-			for (unsigned int j = 0; j < changes[i].modify.size(); j++)
+			for (int j = int(changes[i].modify.size() - 1); j > 0; j--)
 			{
 				temp_P = operate_modify(petri, changes[i].m, changes[i].modify[j]);
 				change_P.insert(change_P.end(), temp_P.begin(), temp_P.end());
 			}
-			for (unsigned int j = 0; j < changes[i].add.size(); j++)
+			for (int j = int(changes[i].add.size() - 1); j > 0; j--)
 			{
 				string add = operate_add(petri, changes[i].m, changes[i].add[j]);
-				//add_num.push_back(changes[i].add[j].first);
+				adjust_changes(changes[i], ADD, changes[i].add[j].first);
+
 				if (add != "")
 					change_P.push_back(add);
 			}
-			for (unsigned int j = 0; j < changes[i].del.size(); j++)
+			for (int j = int(changes[i].del.size() - 1); j > 0; j--)
 			{
 				string del = operate_del(petri, changes[i].m, changes[i].del[j]);
-				//del_num.push_back(changes[i].del[j].first);
+				adjust_changes(changes[i], DEL, changes[i].del[j].first);
+
 				if (del != "")
 					change_P.push_back(del);
 			}
-			for (unsigned int j = 0; j < changes[i].move.size(); j++)
+			for (int j = int(changes[i].move.size() - 1); j > 0; j--)
 			{
 				temp_P = operate_move(petri, changes[i].m, changes[i].move[j]);
 				change_P.insert(change_P.end(), temp_P.begin(), temp_P.end());
