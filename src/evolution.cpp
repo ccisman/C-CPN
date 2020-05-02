@@ -613,8 +613,7 @@ string operate_add(C_Petri &petri, Mapping m, pair<int, int> add)
 			change_exit(petri, father_place, last_T, new_place_exit);
 	}
 
-	return "";
-	//return new_place;
+	return new_place;
 }
 
 string operate_del(C_Petri &petri, Mapping m, pair<int, int> del)
@@ -1060,12 +1059,13 @@ vector<string> evolution(C_Petri &petri, vector<AST_change> &changes)//t1,t2代表
 		//vector<int> add_num,del_num;
 		if (changes[i].m.map1->type == STATEMENT_LIST)
 		{
-			for (int j = int(changes[i].modify.size() - 1); j > 0; j--)
+			for (int j = int(changes[i].modify.size() - 1); j >= 0; j--)
 			{
 				temp_P = operate_modify(petri, changes[i].m, changes[i].modify[j]);
 				change_P.insert(change_P.end(), temp_P.begin(), temp_P.end());
 			}
-			for (int j = int(changes[i].add.size() - 1); j > 0; j--)
+			for (int j = int(changes[i].add.size() - 1); j >= 0; j--)
+			//for (unsigned int j = 0; j < changes[i].add.size(); j++)
 			{
 				string add = operate_add(petri, changes[i].m, changes[i].add[j]);
 				adjust_changes(changes[i], ADD, changes[i].add[j].first);
@@ -1073,7 +1073,7 @@ vector<string> evolution(C_Petri &petri, vector<AST_change> &changes)//t1,t2代表
 				if (add != "")
 					change_P.push_back(add);
 			}
-			for (int j = int(changes[i].del.size() - 1); j > 0; j--)
+			for (int j = int(changes[i].del.size() - 1); j >= 0; j--)
 			{
 				string del = operate_del(petri, changes[i].m, changes[i].del[j]);
 				adjust_changes(changes[i], DEL, changes[i].del[j].first);
@@ -1081,7 +1081,7 @@ vector<string> evolution(C_Petri &petri, vector<AST_change> &changes)//t1,t2代表
 				if (del != "")
 					change_P.push_back(del);
 			}
-			for (int j = int(changes[i].move.size() - 1); j > 0; j--)
+			for (int j = int(changes[i].move.size() - 1); j >= 0; j--)
 			{
 				temp_P = operate_move(petri, changes[i].m, changes[i].move[j]);
 				change_P.insert(change_P.end(), temp_P.begin(), temp_P.end());
