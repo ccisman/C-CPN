@@ -11,7 +11,7 @@ The c program must satisfy ANSI-C grammar.
 
 ## INPUT&OUTPUT
 
-- There is some static variables in tree.h, which describe the input and output file.
+- There is some static variables in main.cpp, which describe the input and output file.
 * origin_dirname : indicate the direction of the input files
 * newfile_dirname : indicate the direction of those files after preprocessing.
 * rg_sliceOnly_dirname : indicate the direction of the output reachable graph.
