@@ -348,7 +348,7 @@ vector<string> C_Petri::get_enter(string name)
 		}
 	}
 	cout << "error in get_enter()" << endl;
-	//exit(1);
+	exit(1);
 }
 
 vector<string> C_Petri::get_exit(string name)
@@ -361,7 +361,7 @@ vector<string> C_Petri::get_exit(string name)
 		}
 	}
 	cout << "error in get_exit()" << endl;
-	//exit(1);
+	exit(1);
 }
 
 void C_Petri::set_global(string p_name)
@@ -386,6 +386,8 @@ bool C_Petri::get_global(string p_name)
 			//break;
 		}
 	}
+	cout << "error in get_global()" << endl;
+	exit(1);
 }
 
 
@@ -573,7 +575,7 @@ double get_value(string s, vector<Place> place, int current)//通过变量名寻找变量
 		ss >> temp;
 		return temp;
 	}
-	int current_1 = place.size() - 1;
+	int current_1 = int(place.size() - 1);
 	/*for (int i = 0; i<int(place.size()); i++)
 	{
 		int p_num = atoi(place[i].name.substr(1).c_str());
@@ -1026,7 +1028,7 @@ string C_Petri::get_fun_P(string p_name)
 		}
 	}
 	cout << "get_fun_P error!" << endl;
-	//exit(1);
+	exit(1);
 }
 
 void C_Petri::set_pre_executed_P(string p_name, string executed_P)
@@ -1076,6 +1078,8 @@ int C_Petri::get_arc_type(string source, string target)
 			return arc[i].type;
 		}
 	}
+	cout << "error in get_arc_type!" << endl;
+	exit(1);
 }
 
 void C_Petri::add_label_P(string p_name, string label_P)
@@ -1163,7 +1167,7 @@ void reset_gen_cpn()
 int find_P_exist(vector<Place> place, string s)//找库所中是否有v_name等于s的，并且返回有几个
 {
 	vector<string> v;
-	for (int i = place.size() - 1; i >= 0; i--)
+	for (int i = int(place.size() - 1); i >= 0; i--)
 	{
 		v.clear();
 		SplitString(place[i].v_name, v, "#");
@@ -1209,7 +1213,7 @@ string find_P_name(C_Petri petri, string v_name)//通过变量名v_name找库所名name
 		vector<string> v;
 		SplitString(s, v, "@");
 
-		int pos = v.size() - 1;
+		int pos = int(v.size() - 1);
 		if (pos >= 0 && v[pos] == v_name)
 			return petri.place[i].name;
 	}
@@ -1228,7 +1232,7 @@ string find_P_name_1(C_Petri petri, string v_name, int current)//通过变量名v_nam
 			break;
 		}
 	}*/
-	int current_1 = petri.place.size() - 1;
+	int current_1 = int(petri.place.size() - 1);
 	for (int i = petri.p_num - 1; i > 0; i--)
 	{
 		if (petri.place[i].id_num <= current)
@@ -1243,7 +1247,7 @@ string find_P_name_1(C_Petri petri, string v_name, int current)//通过变量名v_nam
 		vector<string> v;
 		SplitString(s, v, "@");
 
-		int pos = v.size() - 1;
+		int pos = int(v.size() - 1);
 		if (pos >= 0 && v[pos] == v_name)
 			return petri.place[i].name;
 	}
@@ -1813,7 +1817,7 @@ void process_declarator(gtree *declarator, C_Petri &petri, string tag, string ba
 		petri.Add_Place(_P, V_name, tag, control_P, t, n1, d, s, array_size, ispoint);
 		if (current != 0)
 		{
-			for (unsigned int i = 0; i < petri.p_num; i++)
+			for (int i = 0; i < petri.p_num; i++)
 				if (petri.place[i].name == _P)
 					petri.place[i].id_num = current;
 		}

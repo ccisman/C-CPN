@@ -22,7 +22,7 @@ bool for_to_while(string s, string &oldtext, string &newtext)//true´ú±íËÑË÷µ½£¬f
 	//string newtext, oldtext;
 
 	if (regex_search(s, result, pattern)) {
-		position = result.position();
+		position = int(result.position());
 		res1 = result[1];
 		res2 = result[2];
 		res3 = result[3];
@@ -75,7 +75,7 @@ bool trans_plusplus(string s, string &newtext)//true´ú±íËÑË÷µ½£¬false´ú±íÃ»ËÑË÷µ
 	//string newtext, oldtext;
 
 	if (regex_search(s, result, pattern)) {
-		position = result.position();
+		position = int(result.position());
 	}
 	else
 		return false;
@@ -143,14 +143,14 @@ void trans_plusplus_all(string &s)
 	}
 }
 
-bool trans_assign(string &s)
+void trans_assign(string &s)
 {
 	vector<string> sign_list;
 	sign_list.push_back("+");
 	sign_list.push_back("-");
 	sign_list.push_back("*");
 	sign_list.push_back("/");
-	for (unsigned int i = 0; i < sign_list.size(); i++)
+	for (unsigned int i = 0; i < sign_list.size(); )
 	{
 		string sign = sign_list[i];
 		string p = "([a-zA-Z_]+ *)\\" + sign + "=";
@@ -162,12 +162,15 @@ bool trans_assign(string &s)
 		string text, res1, newtext;
 
 		if (regex_search(s, result, pattern)) {
-			position = result.position();
+			position = int(result.position());
 			text = result[0];
 			res1 = result[1];
 		}
 		else
-			return false;
+		{
+			i++;
+			continue;
+		}
 		newtext = "=" + res1 + sign;
 		text.replace(text.find(sign + "="), 2, newtext);
 		s.replace(s.find(result[0]), result[0].length(), text);
@@ -184,7 +187,7 @@ bool trans_define(string &s)
 	string text, text1, res1, res2;
 
 	if (regex_search(s, result, pattern)) {
-		position = result.position();
+		position = int(result.position());
 		res1 = result[1];
 		res2 = result[2];
 	}
@@ -206,6 +209,7 @@ bool trans_define(string &s)
 		else
 			break;
 	}
+	return true;
 }
 
 void trans_define_all(string &s)
@@ -314,7 +318,7 @@ bool trans_switch(string &s)
 	string text, res1;
 
 	if (regex_search(s, result, pattern)) {
-		position = result.position();
+		position = int(result.position());
 		res1 = result[1];
 		//res2 = result[2];
 		//res3 = result[3];
@@ -370,6 +374,7 @@ bool trans_switch(string &s)
 	string_replace(s, oldtext, newtext);
 	/*cout << oldtext << endl;
 	cout << newtext << endl;*/
+	return true;
 }
 
 void trans_switch_all(string &s)

@@ -140,6 +140,8 @@ bool theSame(gtree *t1, gtree *t2)
 		else
 			return theSame(t1->child, t2->child) && theSame(t1->next, t2->next);
 	}
+	cout << "error in theSame" << endl;
+	exit(1);
 }
 
 
@@ -464,6 +466,7 @@ int find_first_intersect(int position, vector<pair<int, int>> list)
 		if (first*second < 0)
 			return i;
 	}
+	return -1;
 }
 
 vector<pair<int, int>> process_move(vector<pair<int, int>> &list)//对所有移动的节点进行处理，返回所有移动节点的position_pair
@@ -578,7 +581,7 @@ void add_change(vector<pair<int, int>> moves, int last_first, int last_second, i
 
 void process_other(vector<pair<int, int>> moves, vector<pair<int, int>> list, vector<pair<int, int>> &modify, vector<pair<int, int>> &add, vector<pair<int, int>> &del, int count1, int count2)
 {
-	int last_first, last_second, now_first, now_second;
+	int last_first, last_second;
 
 	for (unsigned int i = 1; i < list.size(); i++)
 	{

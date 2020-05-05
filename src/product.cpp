@@ -5,7 +5,7 @@
 /******************************Global_fucntions*********************************/
 bool judgeF(string s)//≈–∂œ «Fªπ «C√¸Ã‚ 
 {
-	int pos = s.find("<=");
+	int pos = int(s.find("<="));
 	if (pos == string::npos)
 	{
 		return true;            // «F√¸Ã‚ 
@@ -47,7 +47,7 @@ int sumtoken(C_Petri ptnet, RG rg, string s, int statenum)//º∆À„ø‚À˘µƒtokenµƒ∫Õ 
 	int sum = 0;
 	while (1)
 	{
-		int pos = s.find_first_of(",");
+		int pos = int(s.find_first_of(","));
 		if (pos == string::npos)
 			break;//»Ù√ª”–’“µΩ ‘ÚÀµ√˜√ª”–¡À 
 		string subs = s.substr(0, pos);     //»°µ√“ª∏ˆp1 
@@ -111,7 +111,7 @@ bool handleFLTLF(C_Petri ptnet, RG rg, string s, int statenum)//¥¶¿ÌF√¸Ã‚
 		bool flag = true;             //≥ı º…ËŒ™true  
 		while (1)
 		{
-			int pos = s.find_first_of(",");
+			int pos = int(s.find_first_of(","));
 			if (pos < 0)
 				break;
 			string subs = s.substr(0, pos);//»°≥ˆ“ª∏ˆt1 »•∫Õ ±‰«® ˝◊È±»Ωœ µ√µΩ±Í∫≈ ‘Ÿ»•isfirable ˝◊È’“ ±‡∫≈ «∑Ò»´≤ø¥Ê‘⁄	
@@ -152,7 +152,7 @@ bool handleFLTLF(C_Petri ptnet, RG rg, string s, int statenum)//¥¶¿ÌF√¸Ã‚
 		bool flag = false;//≥ı º◊¥Ã¨Œ™false  t1,t2,t3, ÷ª“™∆‰÷–“ª∏ˆt’“≤ªµΩ ‘ÚŒ™true º¥≥…¡¢(Ã¯≥ˆ—≠ª∑) 
 		while (1)
 		{
-			int pos = s.find_first_of(",");
+			int pos = int(s.find_first_of(","));
 			if (pos < 0)break;
 			string subs = s.substr(0, pos);//»°≥ˆ“ª∏ˆt1 »•∫Õ ±‰«® ˝◊È±»Ωœ µ√µΩ±Í∫≈ ‘Ÿ»•isfirable ˝◊È’“ ±‡∫≈ «∑Ò»´≤ø¥Ê‘⁄
 			//bool flag=true;//±Íº«t1 «∑Òƒ‹’“µΩ 
@@ -192,7 +192,7 @@ void handleLTLCstep(C_Petri ptnet, RG rg, int &front_sum, int &latter_sum, strin
 {
 	if (s[0] == 't')//‘Ú«∞∞Î≤ø∑÷Œ™token-count–Œ Ω  
 	{
-		int pos = s.find_first_of("<=");//∂®ŒªµΩ<=,»°∆‰«∞∞Î≤ø∑÷  
+		int pos = int(s.find_first_of("<="));//∂®ŒªµΩ<=,»°∆‰«∞∞Î≤ø∑÷  
 		string s_tokon = s.substr(12, pos - 13);//»•≥˝ "token-count(" ")"  ÷ª £p1,p2,    
 		//cout<<" "<<s_tokon<<" ";
 		front_sum = sumtoken(ptnet, rg, s_tokon, statenum);//º∆À„tokenµƒ∫œ 
@@ -218,7 +218,7 @@ void handleLTLCstep(C_Petri ptnet, RG rg, int &front_sum, int &latter_sum, strin
 	else//«∞∞Î≤ø∑÷ «≥£ ˝ ƒ«∫Û√Ê“ª∂® «token-count–Œ Ω 
 	{
 		//¥¶¿Ì«∞∞Î≤ø∑÷  œ÷”–µƒ¥Æ  «¥”≥£ ˝ø™ ºµƒ 
-		int pos = s.find_first_of("<=");//∂®ŒªµΩ<=,»°∆‰«∞∞Î≤ø∑÷
+		int pos = int(s.find_first_of("<="));//∂®ŒªµΩ<=,»°∆‰«∞∞Î≤ø∑÷
 		string num = s.substr(0, pos);//»°≥ˆ≥£ ˝ 
 		front_sum = atoi(num.c_str());
 		//	 cout<< " "<<front_sum<<" ";
@@ -518,7 +518,7 @@ bool isLabel(C_Petri ptnet, RG rg, SBA ba, int vi, int sj, ofstream &ofe)//vi «ø
 	bool  mark = false; //mark±Íº« «∑Ò”–√¸Ã‚≥…¡¢ »Ù“ª÷± «false ƒ«ΩªæÕ «∑«false
 	while (1)
 	{
-		int pos = str.find_first_of("&&");
+		int pos = int(str.find_first_of("&&"));
 		ofe << "RG–Ú∫≈:" << vi << " BA–Ú∫≈:" << sj << " BAµƒlabel:" << str << endl;
 		if (pos == string::npos)//¥¶¿Ì◊Ó∫Û“ª∏ˆ 
 		{

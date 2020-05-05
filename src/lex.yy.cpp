@@ -2214,7 +2214,7 @@ gtree* newNode(std::string node_name, int type)
 		printf("Error:out of memory.\n");
 		exit(1);
 	}
-	int len = node_name.size();
+	int len = int(node_name.size());
 	std::cout << "size is " << len << std::endl;
 	std::cout << "node_name is " << node_name << std::endl;
 	p->place = node_name;

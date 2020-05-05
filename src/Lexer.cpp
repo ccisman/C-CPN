@@ -252,7 +252,7 @@ void AtmoicProps::AP2PT(bool onlyPT)
 				bool flag = regex_search(target, result, r);
 				if (flag == false)
 					break;
-				int position = result.position(1);
+				int position = int(result.position(1));
 				temp = result[1];
 				extract_PT(temp, onlyPT);
 				target = target.substr(position);
@@ -281,7 +281,7 @@ void getPTinformula(string filename, vector<string> &place, vector<string> &tran
 		getline(read, S);
 		strcpy(form, S.c_str());
 
-		Lexer *lex = new Lexer(form, S.length());
+		Lexer *lex = new Lexer(form, int(S.length()));
 		AtmoicProps aps;
 		aps.GetAllAPs(*lex);
 

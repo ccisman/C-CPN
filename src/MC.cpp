@@ -52,7 +52,7 @@ int model_check(C_Petri petri,RG rg)
 		//cout << form << endl;
 		cout << endl;
 		//lexer
-		Lexer *lex = new Lexer(form, S.length());
+		Lexer *lex = new Lexer(form, int(S.length()));
 		//syntax analysis
 		Syntax_Tree *ST;
 		ST = new Syntax_Tree;
@@ -135,7 +135,7 @@ int model_check(C_Petri petri,RG rg)
 		//cout << form << endl;
 		cout << endl;
 		//lexer
-		Lexer *lex = new Lexer(form, S.length());
+		Lexer *lex = new Lexer(form, int(S.length()));
 		//syntax analysis
 		Syntax_Tree *ST;
 		ST = new Syntax_Tree;
