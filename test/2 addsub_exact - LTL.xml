@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<property-set>
+	<property>
+		<id>addsub_exact-LTL</id>
+		<description>Automatically generated</description>
+		<formula>
+		  <all-paths>
+			<globally>
+				<integer-le>
+					<variable>x</variable>
+					<integer-constant>3</integer-constant>
+				</integer-le>
+			</globally>
+		  </all-paths>
+		</formula>
+	</property>

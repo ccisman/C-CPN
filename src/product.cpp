@@ -52,15 +52,15 @@ int sumtoken(C_Petri ptnet, RG rg, string s, int statenum)//计算库所的token的和 
 			break;//若没有找到 则说明没有了 
 		string subs = s.substr(0, pos);     //取得一个p1 
 		//	cout<<"   "<<subs<<" ";
-		for (int i = 0; i < ptnet.p_num; i++)      //去库所的的数组中寻找对应名字的库所 得到下标 
+		for (int i = 0; i < int(rg.petri.place.size()); i++)      //去库所的的数组中寻找对应名字的库所 得到下标 
 		{
-			if (subs == ptnet.place[i].name)//name 还是 vname?????
+			if (subs == rg.petri.place[i].name)//name 还是 vname?????
 			{
-				int idex = ptnet.place[i].id_num;                 //得到库所的编号
+				//int idex = rg.petri.place[i].id_num;                 //得到库所的编号
 				/*目前都是int的情况 直接使用m下的token_num
 				 *后续还有string、char、double类型等
 				 */
-				sum += rg.rgnode[statenum].m[idex].token_num;
+				sum += rg.rgnode[statenum].m[i].token_num;
 				break;
 			}
 		}

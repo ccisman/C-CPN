@@ -302,6 +302,17 @@ void RG::add_next(int node_id, stack<int> &newnode)
 
 void RG::release()
 {
+	for (unsigned int i = 0; i < rgnode.size(); i++)
+	{
+		for (unsigned int j = 0; j < rgnode[i].m.size(); j++)
+		{
+			if (rgnode[i].m[j].n_n > 0)
+				delete[] rgnode[i].m[j].n;
+
+			if (rgnode[i].m[j].n_dec > 0)
+				delete[] rgnode[i].m[j].dec;
+		}
+	}
 	rgnode.clear();
 	petri.release();
 }

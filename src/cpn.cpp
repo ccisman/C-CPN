@@ -27,6 +27,8 @@ Place::Place(string n, string v_n, string colorset_t, bool c_P)
 	v_name = v_n;
 	colorset_tag = colorset_t;
 	controlP = c_P;
+	n_num = 0;
+	n_decimal = 0;
 	id_num = total_num++;
 	global = false;
 	ispoint = false;
@@ -1161,6 +1163,9 @@ string get_gen_T()
 }
 void reset_gen_cpn()
 {
+	Place::total_num = 0;
+	Transition::total_num = 0;
+	Arc::total_num = 0;
 	gen_P_num = 0;
 	gen_T_num = 0;
 }
@@ -3066,7 +3071,11 @@ void ast_to_cpn(C_Petri &petri, gtree *p, int addition)//addition为0表示直接构建
 
 void C_Petri::release()
 {
-	place.clear();
-	transition.clear();
-	arc.clear();
+	for (int i = 0; i < p_num; i++)
+	{
+		if (place[i].n_num > 0)
+			delete[] place[i].num;
+		if (place[i].n_decimal > 0)
+			delete[] place[i].decimal;
+	}
 }

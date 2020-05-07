@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<property-set>
+	<property>
+		<id>bAndbor-LTL</id>
+		<description>Automatically generated</description>
+		<formula>
+		  <all-paths>
+			<finally>
+				<integer-le>
+					<variable>x</variable>
+					<integer-constant>3</integer-constant>
+				</integer-le>
+			</finally>
+		  </all-paths>
+		</formula>
+	</property>

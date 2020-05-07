@@ -20,7 +20,7 @@
 
 string rg_dirname = ".\\rg\\";
 string rg_sliceOnly_dirname = ".\\rg_sliceOnly\\";
-string origin_dirname = "D:\\学习资料\\项目资料\\petri建模\\Testing\\";
+string origin_dirname = "D:\\学习资料\\项目资料\\petri建模\\test7\\";
 string newfile_dirname = ".\\newfile\\";
 
 using namespace std;
@@ -341,13 +341,9 @@ void output_CPN(C_Petri petri, string filePrefix)
 	makeGraph(filePrefix + ".dot", filePrefix + ".png");
 }
 
-void onlybuildCPN(gtree *tree,string new_filename, C_Petri &petri)
+void onlybuildCPN(gtree *tree, C_Petri &petri)
 {
 	reset_gen_cpn();
-	Place::total_num = 0;
-	Transition::total_num = 0;
-	Arc::total_num = 0;
-
 
 	//************************生成cpn
 	create_CPN(petri, tree);
@@ -375,22 +371,26 @@ void get_names(string dirname, vector<string> &filelist)
 
 }
 
-vector<string> get_criteria(C_Petri petri,string variable)
+vector<string> get_criteria(C_Petri petri,string filename)
 {
 	vector<string> result;
+	string xml = filename;
+	xml.replace(xml.find("new.c"), 5, "LTL.xml");
+
+	char xml1[100], xml2[100];
+	strcpy(xml1, xml.c_str());
+	xml.replace(xml.find("LTL.xml"), 7, "LTL1.xml");
+	strcpy(xml2, xml.c_str());
+
+	xml_trans_C(petri, xml1, xml2, result);
 	for (int i = 0; i < petri.p_num; i++)
 	{
 		string temp = petri.place[i].v_name;
 		if (temp == "main begin")
 		{
 			result.push_back(petri.place[i].name);
-			continue;
+			break;
 		}
-		vector<string> v;
-		SplitString(temp, v, "@");
-		int pos = int(v.size() - 1);
-		if (pos >= 0 && v[pos] == variable)
-			result.push_back(petri.place[i].name);
 	}
 	return result;
 }
@@ -398,13 +398,9 @@ vector<string> get_criteria(C_Petri petri,string variable)
 //功能：构建CPN以及生成可达图
 //输入：语法树tree
 //输出：通过引用形参传出，CPN和可达图
-void DirectBuild(gtree *tree, string new_filename, C_Petri &petri, RG &rg)
+void DirectBuild(gtree *tree, C_Petri &petri, RG &rg)
 {
 	reset_gen_cpn();
-	Place::total_num = 0;
-	Transition::total_num = 0;
-	Arc::total_num = 0;
-
 
 	//************************生成cpn
 	create_CPN(petri, tree);
@@ -444,64 +440,117 @@ C_Petri slice(vector<string> criteria,C_Petri petri)
 
 }
 
-void write_to_txt(fstream &fout ,int state_num, int p_num, int t_num, clock_t time)
+void write_to_txt(fstream &fout, int state_num, int p_num, int t_num, clock_t cpn_time, clock_t rg_time, clock_t mc_time)
 {
 	
 	fout << "可达图节点个数：" << state_num << endl;
 	fout << "库所个数:" << p_num << endl;
 	fout << "变迁个数:" << t_num << endl;
-	fout << "直接构建时间：" << time / 1000.0 << "秒" << endl;
+	fout << "生成PDNet时间：" << cpn_time / 1000.0 << "秒" << endl;
+	fout << "生成可达图时间：" << rg_time / 1000.0 << "秒" << endl;
+	fout << "模型检测时间：" << mc_time / 1000.0 << "秒" << endl;
 	fout << endl;
 }
 
 void compare(string filename)
 {
+	string xml = filename;
+	xml.replace(xml.find("new.c"), 5, "LTL1.xml");
+
 	C_Petri petri, petri1, petri2;
 	RG rg, rg1, rg2;
 	vector<string> criteria;
-	clock_t begin, end;
+	clock_t begin, end, cpn_time, rg_time, mc_time;
 	fstream fout;
 	fout.open("result.txt", ios::out | ios::app);
 	fout << "程序：" << filename << endl << endl;
+	
+	begin = clock();
 	gtree *tree = create_tree(filename, true);
+	//end = clock();
+	//tree_time = end - begin;
 
 	//直接建模
 
-	begin = clock();
-	DirectBuild(tree, filename, petri, rg);
+	//begin = clock();
+	//DirectBuild(tree, filename, petri, rg);
+	onlybuildCPN(tree, petri);
 	end = clock();
-	fout << "直接建模：" << endl;
-	write_to_txt(fout, rg.node_num, rg.petri.p_num, rg.petri.t_num, end - begin);
+	cpn_time = end - begin;
 
-	string check_variable = "x";
-	criteria = get_criteria(petri, check_variable);
+	criteria = get_criteria(petri, origin_dirname + filename);
+
+	begin = clock();
+	rg.init_RG(petri);
+	create_RG(rg);
+	end = clock();
+	rg_time = end - begin;
+
+	begin = clock();
+	model_check(petri, rg, origin_dirname + xml);
+	end = clock();
+	mc_time = end - begin;
+
+
+	fout << "直接建模：" << endl;
+	write_to_txt(fout, rg.node_num, rg.petri.p_num, rg.petri.t_num, cpn_time,rg_time,mc_time);
+	rg.release();
+
+	
 
 	//无执行弧切片
+	
 	begin = clock();
 	execute_flag = false;
 	petri1 = slice(criteria, petri);
+	end = clock();
+	cpn_time = end - begin;
+
+	begin = clock();
 	rg1.init_RG(petri1);
 	create_RG(rg1);
 	end = clock();
+	rg_time = end - begin;
+
+	begin = clock();
+	//model_check(petri1, rg1, origin_dirname + xml);
+	end = clock();
+	mc_time = end - begin;
+	
 	fout << "普通切片：" << endl;
-	write_to_txt(fout, rg1.node_num, rg1.petri.p_num, rg1.petri.t_num, end - begin);
+	write_to_txt(fout, rg1.node_num, rg1.petri.p_num, rg1.petri.t_num, cpn_time, rg_time, mc_time);
+	rg1.release();
 
 	//有执行弧切片
-	begin = clock();
 	execute_flag = true;
+	
+	begin = clock();
 	petri2 = slice(criteria, petri);
+	end = clock();
+	cpn_time = end - begin;
+
+	begin = clock();
 	rg2.init_RG(petri2);
 	create_RG(rg2);
 	end = clock();
-	fout << "带执行弧切片：" << endl;
-	write_to_txt(fout, rg2.node_num, rg2.petri.p_num, rg2.petri.t_num, end - begin);
+	rg_time = end - begin;
 
+	begin = clock();
+	model_check(petri2, rg2, origin_dirname + xml);
+	end = clock();
+	mc_time = end - begin;
+
+	fout << "带执行弧切片：" << endl;
+	write_to_txt(fout, rg2.node_num, rg2.petri.p_num, rg2.petri.t_num, cpn_time, rg_time, mc_time);
+	rg2.release();
+
+	petri.release();
 	fout.close();
 }
 
 int main()
 {
-
+	
 	vector<string> filelist;
 
 	string filename, new_filename;
