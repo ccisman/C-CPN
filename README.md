@@ -16,7 +16,7 @@ The c program must satisfy ANSI-C grammar.
 * newfile_dirname : indicate the direction of those files after preprocessing.
 * rg_sliceOnly_dirname : indicate the direction of the output reachable graph.
 
-- During the running of our project, it will read those "*.c" files in the direction indicated by 'origin_dirname', and do preprocessing, putting those files after preprocessing in the direction indicated by newfile_dirname. After creating the RG(reachable graph), it will output the RG in the direction indicated by rg_sliceOnly_dirname and calculate the time using to build CPN and RG.
+- During the running of our project, it will read those "*.c" files in the direction indicated by 'origin_dirname', and do preprocessing, putting those files after preprocessing in the direction indicated by newfile_dirname. After creating the RG(reachable graph), it will output the RG in the direction indicated by rg_sliceOnly_dirname and calculate the time using to build CPN, RG and model checking(use our old version model checker). The time being used will be output to a file named "result.txt" in the project's folder.
 - And it will also read those "*.xml" files when process the corresponding "*.c", extract the places it refers to, and get the criteria for slicing.  
 - In our project, we use Graphviz to show the picture of CPN. So you should install Graphviz first.
 
