@@ -1,6 +1,5 @@
 #include"cpn.h"
 #include"Lexer.h"
-#include"AST_compare.h"
 #include<algorithm>
 
 bool exist_arc(C_Petri &petri, string source, string target, string V);
@@ -459,7 +458,7 @@ void slice_pre_process(C_Petri petri, vector<string> &change_places)
 
 //输入：petri网以及初始变化库所
 //返回：经过变化影响分析后的petri网
-C_Petri changeAnalyse(C_Petri &petri, vector<string> change_places)
+C_Petri slice(C_Petri &petri, vector<string> change_places)
 {
 	vector<string> change_P, change_T, formula_P, formula_T, others;
 	vector<Arc> change_Arc;

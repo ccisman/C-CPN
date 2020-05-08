@@ -432,10 +432,10 @@ void out_tree(string filename)
 //功能：对CPN切片
 //输入：准则criteria，CPN
 //输出：返回切片后的CPN
-C_Petri slice(vector<string> criteria,C_Petri petri)
+C_Petri slicing(vector<string> criteria,C_Petri petri)
 {
 	C_Petri petri1;
-	petri1 = changeAnalyse(petri, criteria);
+	petri1 = slice(petri, criteria);
 	return petri1;
 
 }
@@ -502,7 +502,7 @@ void compare(string filename)
 	
 	begin = clock();
 	execute_flag = false;
-	petri1 = slice(criteria, petri);
+	petri1 = slicing(criteria, petri);
 	end = clock();
 	cpn_time = end - begin;
 
@@ -525,7 +525,7 @@ void compare(string filename)
 	execute_flag = true;
 	
 	begin = clock();
-	petri2 = slice(criteria, petri);
+	petri2 = slicing(criteria, petri);
 	end = clock();
 	cpn_time = end - begin;
 

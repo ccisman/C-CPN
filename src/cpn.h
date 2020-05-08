@@ -180,7 +180,7 @@ string find_P_name(C_Petri petri, string v_name);
 string find_T_name(C_Petri petri, string v_name);
 double change_and_cal(string s, vector<Place> place, int current);
 
-C_Petri changeAnalyse(C_Petri &petri, vector<string> change_places);
+C_Petri slice(C_Petri &petri, vector<string> change_places);
 
 int string_replace(string &s1, const string &s2, const string &s3);
 
@@ -193,3 +193,7 @@ void ast_to_cpn(C_Petri &petri, gtree *p, int addition);//additionÎª0±íÊ¾Ö±½Ó¹¹½
 void reset_gen_cpn();
 
 void process_label(C_Petri &petri);//´¦Àí±êÇ©Óï¾ä
+
+string find_P_name(C_Petri petri, string v_name);
+
+string find_P_name_1(C_Petri petri, string v_name, int current);

@@ -8,7 +8,6 @@
 
 #include"tree.h"
 #include"cpn.h"
-#include"AST_compare.h"
 #include"y.tab.h"
 
 
@@ -401,33 +400,3 @@ void Traverse(gtree *p)//²âÊÔº¯Êý
 	Traverse(p->next);
 }
 
-vector<AST_change> compare_AST(gtree *tree1, gtree *tree2)
-{
-
-
-
-	vector<Mapping> M;
-	top_down(tree1, tree2, M);
-	for (unsigned int i = 0; i < M.size(); i++)
-	{
-
-		if (M[i].map1->type == STATEMENT_LIST && M[i].map1->parent->type == STATEMENT_LIST)
-		{
-			Mapping temp_m;
-			temp_m.map1 = M[i].map1->child;
-			temp_m.map2 = M[i].map2->child;
-			M.push_back(temp_m);
-		}
-		if (M[i].map1->type == DECLARATION_LIST && M[i].map1->parent->type == DECLARATION_LIST)
-		{
-			Mapping temp_m;
-			temp_m.map1 = M[i].map1->child;
-			temp_m.map2 = M[i].map2->child;
-			M.push_back(temp_m);
-		}
-	}
-	vector<AST_change> changes = extract_change(tree1, tree2, M);
-	//	cout << Equal_Tree(tree1, tree2);
-	//	Traverse(tree2);
-	return changes;
-}

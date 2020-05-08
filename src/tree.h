@@ -72,3 +72,4 @@ bool judge_expression_statement(gtree *statement1);
 bool judge_label_statement(gtree *statement1);
 void pre_process(string &s);
 bool judge_inside_compound_statement(gtree *statement1);
+string gen_P();
