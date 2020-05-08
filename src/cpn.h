@@ -197,3 +197,13 @@ void process_label(C_Petri &petri);//¥¶¿Ì±Í«©”Ôæ‰
 string find_P_name(C_Petri petri, string v_name);
 
 string find_P_name_1(C_Petri petri, string v_name, int current);
+
+void readGraph(string input, string output);
+
+void makeGraph(string inputname, string outputname);
+
+void intofile(C_Petri petri);
+
+void create_CPN(C_Petri &petri, gtree *tree);
+
+void output_CPN(C_Petri petri, string filePrefix);

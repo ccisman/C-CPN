@@ -115,7 +115,6 @@ void splitExpression(string &s, vector<string>& v)//传入字符串和结果集合，将字符
 	v.push_back(s1);
 }
 
-
 int string_replace(string &s1, const string &s2, const string &s3)//在s1中找到s2字串，替换成s3
 {
 	string::size_type pos = 0;
@@ -125,32 +124,6 @@ int string_replace(string &s1, const string &s2, const string &s3)//在s1中找到s2
 	{
 		s1.replace(pos, a, s3);
 		pos += b;
-	}
-	return 0;
-}
-
-
-int find_T_exist(vector<Transition> transition, string s)//找库所中是否有v_name等于s的，并且返回有几个
-{
-	vector<string> v;
-	for (int i = int(transition.size() - 1); i >= 0; i--)
-	{
-		if (transition[i].booleanExpression == "")
-			SplitString(transition[i].v_Expression, v, "#");
-		else
-			SplitString(transition[i].booleanExpression, v, "#");
-		if (v[0] == s)
-		{
-			if (v.size() == 1)
-			{
-				return 1;
-			}
-			else
-			{
-				return atoi(v[1].c_str()) + 1;
-
-			}
-		}
 	}
 	return 0;
 }
@@ -234,7 +207,6 @@ void intofile(C_Petri petri)
 	out.close();
 }
 
-
 void readGraph(string input, string output) //.txt 转 .dot
 {
 
@@ -295,50 +267,6 @@ void makeGraph(string inputname, string outputname) //生成png图片
 	const char* cmd = s.data();
 	const char* iname = inputname.data();
 	system(cmd);
-}
-
-
-
-
-//evolution部分结束
-//********************//
-//********************//
-
-bool exist_in(vector<string> v, string s);
-
-void initializing(C_Petri &petri)//初始化petri网，main_begin赋上token，连接main_begin和main_v
-{
-	///初始给main的token赋值
-	for (int i = 0; i < petri.p_num; i++)
-	{
-		if (petri.place[i].v_name == "main begin")
-		{
-			petri.place[i].token_num = 1;
-			break;
-		}
-	}
-
-	string main_v = find_P_name(petri, "main_v");
-	vector<string> main_exit_T = petri.get_exit(find_P_name(petri, "main begin"));
-	for (unsigned int i = 0; i < main_exit_T.size(); i++)
-		petri.Add_Arc(main_exit_T[i], main_v, "", false);
-}
-
-void initial_changeAnalyse_cpn(C_Petri &petri1, C_Petri &petri, vector<string> change_P, vector<string> change_T, vector<Arc> &change_Arc);
-
-void create_CPN(C_Petri &petri, gtree *tree)
-{
-	ast_to_cpn(petri, tree, 0);
-	process_label(petri);
-	initializing(petri);
-}
-
-void output_CPN(C_Petri petri, string filePrefix)
-{
-	intofile(petri);
-
-	readGraph(filePrefix + ".txt", filePrefix + ".dot");
-	makeGraph(filePrefix + ".dot", filePrefix + ".png");
 }
 
 void onlybuildCPN(gtree *tree, C_Petri &petri)
