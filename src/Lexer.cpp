@@ -192,7 +192,6 @@ void AtmoicProps::GetAllAPs(Lexer lex) {
 }
 
 
-//从形如{T1,T2,}这样的字符串中提取出所有的库所变迁名，放入数组place
 void AtmoicProps::extract_PT(string s, bool onlyPT)
 {
 	vector<string> v;
@@ -210,14 +209,14 @@ void AtmoicProps::extract_PT(string s, bool onlyPT)
 					transition.push_back(v[k]);
 				else
 				{
-					cout << "提取出非T，非P因子：" << v[k] << endl;
+					cout << "extract factor：" << v[k] << endl;
 					exit(1);
 				}
 			}
 		}
 }
 
-bool judge_PT(string s)//返回true表示P，返回false表示T
+bool judge_PT(string s)
 {
 	if (s[1] == 'T')
 		return false;
@@ -262,7 +261,7 @@ void AtmoicProps::AP2PT(bool onlyPT)
 	}
 }
 
-//从文件中提取LTL公式，并将公式中的库所变迁提取出来，通过place和transition两个变量返回
+
 void getPTinformula(string filename, vector<string> &place, vector<string> &transition, vector<string>&others, bool onlyPT)
 {
 	ifstream read(filename, ios::in);

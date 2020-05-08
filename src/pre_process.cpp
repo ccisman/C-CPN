@@ -11,7 +11,7 @@ static string init_num = "101";
 
 extern int string_replace(string &s1, const string &s2, const string &s3);
 
-bool for_to_while(string s, string &oldtext, string &newtext)//true代表搜索到，false代表没搜索到，这里s不是引用
+bool for_to_while(string s, string &oldtext, string &newtext)
 {
 	regex pattern("for *\\((.*?);(.*?);(.*)\\)");
 	smatch result;
@@ -63,7 +63,7 @@ void for_to_while_all(string &s)
 	}
 }
 
-bool trans_plusplus(string s, string &newtext)//true代表搜索到，false代表没搜索到，这里s是引用
+bool trans_plusplus(string s, string &newtext)
 {
 	regex pattern("\\+\\+");
 	smatch result;

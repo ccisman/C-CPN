@@ -20,14 +20,10 @@
 
 string rg_dirname = ".\\rg\\";
 string rg_sliceOnly_dirname = ".\\rg_sliceOnly\\";
-string origin_dirname = "D:\\学习资料\\项目资料\\petri建模\\test7\\";
+string origin_dirname = "replace to your direction";
 string newfile_dirname = ".\\newfile\\";
 
 using namespace std;
-int tb_num = 0;
-int nextnum = 100;//标号(从100开始)
-int labelnum = 1;
-int labelnum1 = 1;
 
 
 void SplitString(const string& s, vector<string>& v, const string& c)
@@ -45,7 +41,7 @@ void SplitString(const string& s, vector<string>& v, const string& c)
 	if (pos1 != s.length())
 		v.push_back(s.substr(pos1));
 }
-void splitExpression(string &s, vector<string>& v)//传入字符串和结果集合，将字符串根据>,<等分割并放入结果集
+void splitExpression(string &s, vector<string>& v)//Split expression
 {
 	string s1;
 	bool flag_shut = false;
@@ -96,8 +92,7 @@ void splitExpression(string &s, vector<string>& v)//传入字符串和结果集合，将字符
 		{
 			if (s[i + 1] == '=')
 				i++;
-			//else
-				//cout << "出现异常!=或==" << endl;
+
 			v.push_back(s1);
 			s1.clear();
 			flag_shut = false;
@@ -115,7 +110,7 @@ void splitExpression(string &s, vector<string>& v)//传入字符串和结果集合，将字符
 	v.push_back(s1);
 }
 
-int string_replace(string &s1, const string &s2, const string &s3)//在s1中找到s2字串，替换成s3
+int string_replace(string &s1, const string &s2, const string &s3)//replace s2 in s1 to s3
 {
 	string::size_type pos = 0;
 	string::size_type a = s2.size();
@@ -207,7 +202,7 @@ void intofile(C_Petri petri)
 	out.close();
 }
 
-void readGraph(string input, string output) //.txt 转 .dot
+void readGraph(string input, string output) //transfer .txt to .dot
 {
 
 	const char* in = input.data();
@@ -257,7 +252,7 @@ void readGraph(string input, string output) //.txt 转 .dot
 	fout.close();
 }
 
-void makeGraph(string inputname, string outputname) //生成png图片
+void makeGraph(string inputname, string outputname) //generate .png
 {
 	string s = "";
 	s += "dot -Tpng ";
@@ -273,10 +268,10 @@ void onlybuildCPN(gtree *tree, C_Petri &petri)
 {
 	reset_gen_cpn();
 
-	//************************生成cpn
+	//************************create CPN
 	create_CPN(petri, tree);
 
-	//************************输出cpn
+	//************************output CPN
 	output_CPN(petri, "output");
 }
 
@@ -284,9 +279,9 @@ void get_names(string dirname, vector<string> &filelist)
 {
 	struct _finddata_t fa;
 	long fHandle;
-	if ((fHandle = _findfirst(dirname.c_str(), &fa)) == -1L)//这里可以改成需要的目录 
+	if ((fHandle = _findfirst(dirname.c_str(), &fa)) == -1L)
 	{
-		printf("当前目录下没有txt文件\n");
+		printf("there is no .txt file\n");
 		return;
 	}
 	else
@@ -323,43 +318,31 @@ vector<string> get_criteria(C_Petri petri,string filename)
 	return result;
 }
 
-//功能：构建CPN以及生成可达图
-//输入：语法树tree
-//输出：通过引用形参传出，CPN和可达图
+//function:build CPN and RG
+//input:AST tree
+//output:CPN petri , RG rg
 void DirectBuild(gtree *tree, C_Petri &petri, RG &rg)
 {
 	reset_gen_cpn();
 
-	//************************生成cpn
+	//************************create CPN
 	create_CPN(petri, tree);
 
-	//************************输出cpn
+	//************************output CPN
 	output_CPN(petri, "output");
 
-	//************************生成可达图
+	//************************create RG
 	vector<string> v;
-	//RG rg(petri); //定义可达图
+	
 	rg.init_RG(petri);
 	create_RG(rg);
 	//print_RG(rg, dirname + new_filename);
 }
 
-//功能：输出语法树
-//输入：源程序名
-//输出：将语法树以png图片格式放在tree.png中
-void out_tree(string filename)
-{
-	gtree *tree;
-	C_Petri petri;
-	RG rg;
-	tree = create_tree(filename, false);
-	intofile_tree(tree);
-	makeGraph("tree.dot", "tree.png");
-}
 
-//功能：对CPN切片
-//输入：准则criteria，CPN
-//输出：返回切片后的CPN
+//function:slice a cpn
+//input:criteria，CPN
+//output:CPN after slicing
 C_Petri slicing(vector<string> criteria,C_Petri petri)
 {
 	C_Petri petri1;
@@ -371,12 +354,12 @@ C_Petri slicing(vector<string> criteria,C_Petri petri)
 void write_to_txt(fstream &fout, int state_num, int p_num, int t_num, clock_t cpn_time, clock_t rg_time, clock_t mc_time)
 {
 	
-	fout << "可达图节点个数：" << state_num << endl;
-	fout << "库所个数:" << p_num << endl;
-	fout << "变迁个数:" << t_num << endl;
-	fout << "生成PDNet时间：" << cpn_time / 1000.0 << "秒" << endl;
-	fout << "生成可达图时间：" << rg_time / 1000.0 << "秒" << endl;
-	fout << "模型检测时间：" << mc_time / 1000.0 << "秒" << endl;
+	fout << "rg node num:" << state_num << endl;
+	fout << "place num:" << p_num << endl;
+	fout << "transition num:" << t_num << endl;
+	fout << "time to build CPN:" << cpn_time / 1000.0 << " second" << endl;
+	fout << "time to build RG" << rg_time / 1000.0 << " second" << endl;
+	fout << "time to model check" << mc_time / 1000.0 << " second" << endl;
 	fout << endl;
 }
 
@@ -391,17 +374,13 @@ void compare(string filename)
 	clock_t begin, end, cpn_time, rg_time, mc_time;
 	fstream fout;
 	fout.open("result.txt", ios::out | ios::app);
-	fout << "程序：" << filename << endl << endl;
+	fout << "program：" << filename << endl << endl;
 	
 	begin = clock();
 	gtree *tree = create_tree(filename, true);
-	//end = clock();
-	//tree_time = end - begin;
 
-	//直接建模
+	//Direct build
 
-	//begin = clock();
-	//DirectBuild(tree, filename, petri, rg);
 	onlybuildCPN(tree, petri);
 	end = clock();
 	cpn_time = end - begin;
@@ -420,13 +399,13 @@ void compare(string filename)
 	mc_time = end - begin;
 
 
-	fout << "直接建模：" << endl;
+	fout << "Direct build：" << endl;
 	write_to_txt(fout, rg.node_num, rg.petri.p_num, rg.petri.t_num, cpn_time,rg_time,mc_time);
 	rg.release();
 
 	
 
-	//无执行弧切片
+	//normal slicing
 	
 	begin = clock();
 	execute_flag = false;
@@ -441,15 +420,16 @@ void compare(string filename)
 	rg_time = end - begin;
 
 	begin = clock();
-	//model_check(petri1, rg1, origin_dirname + xml);
+	model_check(petri1, rg1, origin_dirname + xml);
 	end = clock();
 	mc_time = end - begin;
 	
-	fout << "普通切片：" << endl;
+	fout << "normal slicing" << endl;
 	write_to_txt(fout, rg1.node_num, rg1.petri.p_num, rg1.petri.t_num, cpn_time, rg_time, mc_time);
 	rg1.release();
 
-	//有执行弧切片
+	//slicing with executed arc
+
 	execute_flag = true;
 	
 	begin = clock();
@@ -468,7 +448,7 @@ void compare(string filename)
 	end = clock();
 	mc_time = end - begin;
 
-	fout << "带执行弧切片：" << endl;
+	fout << "slicing with executed arc" << endl;
 	write_to_txt(fout, rg2.node_num, rg2.petri.p_num, rg2.petri.t_num, cpn_time, rg_time, mc_time);
 	rg2.release();
 

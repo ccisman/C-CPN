@@ -21,29 +21,29 @@ public:
 class nextNode
 {
 public:
-	int num; //下一个节点的编号
-	string T; //发生的变迁名
+	int num; 
+	string T; 
 
 };
 
 class RGNode
 {
 public:
-	//string name; //该节点的名称
-	int num; // 该节点的编号
-	int enableNum; //可发生变迁数
-	vector<M> m; //该状态每一个库所的M标识
-	vector<int> isfirable;  //可发生变迁数组
-	vector<nextNode> next; //后继节点的集合
-	bool end;//端点标记
+
+	int num; 
+	int enableNum; 
+	vector<M> m; 
+	vector<int> isfirable;  
+	vector<nextNode> next; 
+	bool end;
 };
 
 class RG
 {
 public:
-	int node_num; //节点个数
+	int node_num; 
 	C_Petri petri;
-	vector<RGNode> rgnode; //可达图，邻接表形式
+	vector<RGNode> rgnode; 
 
 public:
 	RG(C_Petri petri);

@@ -180,15 +180,15 @@ void Syntax_Tree::reverse_polish(Lexer lex)
 		node.w = curw;
 		node.prilevel = DecidePrilevel(curw.typenum);
 
-		if (isoperand(curw.typenum))             //是原子命题
+		if (isoperand(curw.typenum))          
 		{
 			Operand.push_ls(node);
 		}
-		else if (curw.typenum == $Lpar)           //左括号
+		else if (curw.typenum == $Lpar)     
 		{
 			Operator.push_ls(node);
 		}
-		else if (curw.typenum == $Rpar)            //右括号
+		else if (curw.typenum == $Rpar)       
 		{
 			LSNode temp;
 			while (!Operator.istoplpar())
@@ -200,13 +200,13 @@ void Syntax_Tree::reverse_polish(Lexer lex)
 				}
 				Operand.push_ls(temp);
 			}
-			Operator.pop_ls();        //弹出左括号
+			Operator.pop_ls();  
 		}
 		else
 		{
 			if (Operator.istoplpar())
 				Operator.push_ls(node);
-			else if (node.prilevel <= Operator.topprilevel())    //比栈顶元素优先级要高，直接压栈
+			else if (node.prilevel <= Operator.topprilevel())    
 			{
 				Operator.push_ls(node);
 			}
@@ -343,7 +343,7 @@ void Syntax_Tree::convert(ST_Node *T, formula_stack &Ustack)
 	if (T->character == "!")
 	{
 		p = T->parent;
-		if (p->left == T)              //T是他父亲节点的左子树
+		if (p->left == T)             
 		{
 			p->left = T->left;
 			T->left->parent = p;
@@ -1097,7 +1097,7 @@ void CF_Tree::PrintCFTree(CFTreeNode *ctn, CFTreeLeaf *ctl, int n)
 }
 void CF_Tree::Disjunction(CFTreeNode *&ctn)
 {
-	//剪枝
+
 	/*if (ctn->character=="&&" && ctn->lleft != NULL)
 	{
 		if (isinclufalse(*ctn->lleft))
@@ -1116,7 +1116,7 @@ void CF_Tree::Disjunction(CFTreeNode *&ctn)
 		if (isinclufalse(*ctn->lright))
 		{
 			ctn->ss.clear();
-			if (ctn->nleft != NULL)       //内存回收
+			if (ctn->nleft != NULL)       
 				DelCFTree(ctn->nleft);
 			delete ctn->lright;
 			ctn->lleft = ctn->lright = NULL;
@@ -1124,7 +1124,7 @@ void CF_Tree::Disjunction(CFTreeNode *&ctn)
 			return;
 		}
 	}*/
-	//后序遍历
+
 	if (ctn->nleft != NULL)
 		Disjunction(ctn->nleft);
 	if (ctn->nright != NULL)

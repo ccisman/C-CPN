@@ -3,7 +3,7 @@
 #include<algorithm>
 
 bool exist_arc(C_Petri &petri, string source, string target, string V);
-bool exist_in(vector<string> v, string s)//找到返回true
+bool exist_in(vector<string> v, string s)//return true if found
 {
 	for (unsigned int i = 0; i < v.size(); i++)
 	{
@@ -13,48 +13,27 @@ bool exist_in(vector<string> v, string s)//找到返回true
 	return false;
 }
 
-void find_previous_P(C_Petri &petri, string T, vector<string> &v)//, vector<string> &v1)//变迁找前集库所允许执行弧（特殊处理）
+void find_previous_P(C_Petri &petri, string T, vector<string> &v)
 {
-	//vector<string> v, v1;
 	for (int i = 0; i < petri.arcnum; i++)
 	{
-		if (petri.arc[i].sourceP == true && petri.arc[i].target == T )//&& petri.arc[i].V != "executed" && petri.arc[i].V != "executed#")
+		if (petri.arc[i].sourceP == true && petri.arc[i].target == T)//&& petri.arc[i].V != "executed" && petri.arc[i].V != "executed#")
 		{
-			/*if (exist_arc(petri, petri.arc[i].target, petri.arc[i].source, petri.arc[i].V))
-				v1.push_back(petri.arc[i].source);
-			else*/
 			if (petri.arc[i].type == 2 || petri.arc[i].type == 4)
 				continue;
-				v.push_back(petri.arc[i].source);
+			v.push_back(petri.arc[i].source);
 		}
-		/*else if (petri.arc[i].sourceP == true && petri.arc[i].target == T && (petri.arc[i].V == "executed" || petri.arc[i].V == "executed#"))
-		{
-			for (int j = 0; j < petri.p_num; j++)
-			{
-				if (petri.place[j].name == petri.arc[i].source)
-					if (petri.place[j].v_name == "executedP")
-					{
-						v.push_back(petri.arc[i].source);
-						break;
-					}
-			}
-		}*/
-
 	}
 	return ;
 }
 
-void find_afterward_P(C_Petri &petri, string T,vector<string> &v)//,vector<string> &v1)
+void find_afterward_P(C_Petri &petri, string T,vector<string> &v)
 {
-	//vector<string> v, v1;
 	for (int i = 0; i < petri.arcnum; i++)
 	{
 		
 		if (petri.arc[i].sourceP == false && petri.arc[i].source == T && (execute_flag == false || (petri.arc[i].V != "executed" && petri.arc[i].V != "executed#")))
 		{
-			/*if (exist_arc(petri, petri.arc[i].target, petri.arc[i].source, petri.arc[i].V))
-				v1.push_back(petri.arc[i].target);
-			else*/
 			if (petri.arc[i].type == 1 || petri.arc[i].type == 2)
 				continue;
 				v.push_back(petri.arc[i].target);
@@ -130,7 +109,7 @@ vector<string> forward_exist_T(C_Petri &petri, vector<string> change_T, string p
 
 void slice_pre_process(C_Petri petri, vector<string> &change_places);
 
-void back_forward_slicing(C_Petri &petri, vector<string> place, vector<string> &final_P, vector<string>&final_T, vector<Arc> &final_Arc)//变化前网petri,预处理后的库所数组place
+void back_forward_slicing(C_Petri &petri, vector<string> place, vector<string> &final_P, vector<string>&final_T, vector<Arc> &final_Arc)
 {
 	vector<string> P1, P2, P_done, T1, T2;// , P_read;
 	P1 = place;
@@ -138,7 +117,7 @@ void back_forward_slicing(C_Petri &petri, vector<string> place, vector<string> &
 	{
 		if (!exist_in(P_done, P1[i]))
 		{
-			//先判断是非为全局变量
+			//judge if it is a global variable
 			bool global = petri.get_global(P1[i]);
 			if (global == true)
 			{
@@ -152,7 +131,6 @@ void back_forward_slicing(C_Petri &petri, vector<string> place, vector<string> &
 
 			for (int j = 0; j < petri.arcnum; j++)
 			{
-				//不能是token不改变的变迁
 				/*if (exist_arc(petri, petri.arc[j].target, petri.arc[j].source, petri.arc[j].V))
 					continue;*/
 				
@@ -160,7 +138,7 @@ void back_forward_slicing(C_Petri &petri, vector<string> place, vector<string> &
 				{
 					if (petri.arc[j].type == 1 || petri.arc[j].type == 2 || petri.arc[j].type == 5)
 						continue;
-					if (!exist_in(T1, petri.arc[j].target))//不在T1内
+					if (!exist_in(T1, petri.arc[j].target))
 					{
 
 						if (execute_flag == false ||( petri.arc[j].V != "executed"&&petri.arc[j].V != "executed#"))//不是执行弧
@@ -206,11 +184,10 @@ void back_forward_slicing(C_Petri &petri, vector<string> place, vector<string> &
 				{
 					if (petri.arc[j].type == 2 || petri.arc[j].type == 3)
 						continue;
-					if (!exist_in(T1, petri.arc[j].source))//不在T1内
+					if (!exist_in(T1, petri.arc[j].source))
 					{
 						if (execute_flag == false ||( petri.arc[j].V != "executed"&&petri.arc[j].V != "executed#"))//不是执行弧
 						{
-							//不能是token不改变的库所
 							/*for (int k = 0; k < petri.p_num; k++)
 							{
 								if (petri.place[k].name == P1[i])
@@ -313,7 +290,7 @@ void post_process(C_Petri &petri, vector<string> change_P, vector<string> change
 				{
 					Arc arc(temp_v[j], change_P[i], "executed", false);
 
-					//防止重复添加
+					//in case of repeat add
 					for (int k = int(change_Arc.size() - 1); k >= 0; k--)
 						if (change_Arc[k].source == arc.source && change_Arc[k].target == arc.target)
 						{
@@ -334,7 +311,7 @@ void post_process(C_Petri &petri, vector<string> change_P, vector<string> change
 void initial_changeAnalyse_cpn(C_Petri &petri1, C_Petri &petri, vector<string> change_P, vector<string> change_T, vector<Arc> &change_Arc)
 {
 	cout << endl;
-	cout << "相关库所：" << endl;
+	cout << "relative places：" << endl;
 
 	petri1.p_num = int(change_P.size());
 	petri1.t_num = int(change_T.size());
@@ -351,7 +328,7 @@ void initial_changeAnalyse_cpn(C_Petri &petri1, C_Petri &petri, vector<string> c
 	}
 
 	cout << endl;
-	cout << "相关变迁：" << endl;
+	cout << "related transitions：" << endl;
 	for (unsigned int i = 0; i < change_T.size(); i++)
 	{
 		cout << change_T[i] << "    ";
@@ -362,7 +339,7 @@ void initial_changeAnalyse_cpn(C_Petri &petri1, C_Petri &petri, vector<string> c
 		}
 	}
 	cout << endl;
-	cout << "相关弧：" << endl;
+	cout << "related arcs：" << endl;
 	for (unsigned int i = 0; i < change_Arc.size(); i++)
 	{
 		cout << change_Arc[i].source << "------->" << change_Arc[i].target << endl;
@@ -456,24 +433,10 @@ void slice_pre_process(C_Petri petri, vector<string> &change_places)
 	}
 }
 
-//输入：petri网以及初始变化库所
-//返回：经过变化影响分析后的petri网
 C_Petri slice(C_Petri &petri, vector<string> change_places)
 {
 	vector<string> change_P, change_T, formula_P, formula_T, others;
 	vector<Arc> change_Arc;
-
-	//提取公式中的库所变迁，并将变迁转化为库所
-	/*getPTinformula("formulaC.txt", formula_P, formula_T, others, true);
-	getPTinformula("formulaF.txt", formula_P, formula_T, others, true);
-	for (unsigned int i = 0; i < formula_T.size(); i++)
-		formula_P.push_back(find_relateP(petri, formula_T[i]));
-	change_places.insert(change_places.end(), formula_P.begin(), formula_P.end());
-
-	sort(change_places.begin(), change_places.end());
-	change_places.erase(unique(change_places.begin(), change_places.end()), change_places.end());*/
-
-	//change_T.insert(change_T.end(), formula_T.begin(), formula_T.end());
 
 	slice_pre_process(petri, change_places);
 	back_forward_slicing(petri, change_places, change_P, change_T, change_Arc);

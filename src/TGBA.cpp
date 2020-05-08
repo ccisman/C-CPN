@@ -100,7 +100,7 @@ bool isAincludeB(set<int> A, set<int> B)
 	{
 		set<int>::iterator iterA;
 		iterA = find(A.begin(), A.end(), *iterB);
-		if (iterA == A.end())   //找不到
+		if (iterA == A.end()) 
 			return false;
 	}
 	return true;
@@ -151,7 +151,7 @@ void TGBA::AssignID(TGBA_vex &ss)
  * */
 void TGBA::AddState(TGBA_vex ss, vector<TGBA_vex>::iterator &addposi)
 {
-	//查重
+
 	bool isExist = false;
 	vector<TGBA_vex>::iterator iters;
 	for (iters = states.begin(); iters != states.end(); iters++)
@@ -163,7 +163,7 @@ void TGBA::AddState(TGBA_vex ss, vector<TGBA_vex>::iterator &addposi)
 			break;
 		}
 	}
-	//没有重复节点
+
 	if (!isExist)
 	{
 		this->states.push_back(ss);
@@ -175,19 +175,17 @@ bool TGBA::isFindUnexpState(vector<TGBA_vex>::iterator &iter)
 	for (iter = states.begin(); iter != states.end(); iter++)
 	{
 		if (iter->explored == false)
-			return true;            //找到一个未拓展的节点
+			return true;          
 	}
 	return false;
 }
 bool TGBA::isStateEqu(TGBA_vex A, TGBA_vex B)
 {
-	//A，B两个状态等价
-	//1.AB的后继一样
-	//2.到每一个后继的迁移条件和标签是一样的
-	if (!isAequB(A.nextvexset, B.nextvexset))   //判断后继是否一样
+
+	if (!isAequB(A.nextvexset, B.nextvexset))   
 		return false;
 	set<int>::iterator iterint;
-	for (iterint = A.nextvexset.begin(); iterint != A.nextvexset.end(); iterint++)   //检查到每一个后继的迁移条件和标签
+	for (iterint = A.nextvexset.begin(); iterint != A.nextvexset.end(); iterint++)   
 	{
 		int next = *iterint;
 		vector<TGBA_arc>::iterator Aloc;
@@ -257,7 +255,7 @@ void TGBA::CreatTransition(vector<TGBA_vex>::iterator &front, vector<TGBA_vex>::
 	tt.succeed = rear->num;
 	tt.transcondi = transcond;
 	int i = 0;
-	for (i; i < Ustack.size(); i++)           //添加标签
+	for (i; i < Ustack.size(); i++)         
 	{
 		bool ishave = false;
 		STNode p = Ustack.loc[i];
@@ -266,11 +264,11 @@ void TGBA::CreatTransition(vector<TGBA_vex>::iterator &front, vector<TGBA_vex>::
 			tt.label.insert(i);
 	}
 
-	bool isttunnecessary = false;       //tt是多余的吗
+	bool isttunnecessary = false;      
 	vector<TGBA_arc>::iterator itertran;
 	for (itertran = transition.begin(); itertran != transition.end(); )
 	{
-		if ((*itertran).pioneer == tt.pioneer && (*itertran).succeed == tt.succeed)   //前驱后继都一样
+		if ((*itertran).pioneer == tt.pioneer && (*itertran).succeed == tt.succeed)  
 		{
 			if (isAincludeB((*itertran).transcondi, tt.transcondi))
 			{
@@ -292,7 +290,7 @@ void TGBA::CreatTransition(vector<TGBA_vex>::iterator &front, vector<TGBA_vex>::
 	if (isttunnecessary == false)
 	{
 		this->transition.push_back(tt);
-		front->nextvexset.insert(rear->num);     //给前驱添加后继
+		front->nextvexset.insert(rear->num);   
 	}
 }
 void TGBA::CreatTGBA(formula_stack Ustack, ST_Node *root)
@@ -302,14 +300,14 @@ void TGBA::CreatTGBA(formula_stack Ustack, ST_Node *root)
 	init.form.insert(root);
 	this->states.push_back(init);
 	vector<TGBA_vex>::iterator iter;
-	while (isFindUnexpState(iter))                     //从顶点列表中找到一个未拓展的节点开始拓展
+	while (isFindUnexpState(iter))                  
 	{
-		int formnum = iter->form.size();            //该状态有多少个子式组成
+		int formnum = iter->form.size();         
 		state_stack *nextsates;
-		nextsates = new state_stack[formnum];       //每个子式所代表的CF范式
-		for (int i = 0; i < formnum; i++)                    //求每个子式的CF范式
+		nextsates = new state_stack[formnum];     
+		for (int i = 0; i < formnum; i++)                  
 		{
-			if (iter->form.loc[i]->isGetCF == false)      //当前子式还未得到CF范式
+			if (iter->form.loc[i]->isGetCF == false)    
 			{
 				CF_Tree CFT;
 				CFT.CFBuilder(iter->form.loc[i]);
@@ -325,25 +323,25 @@ void TGBA::CreatTGBA(formula_stack Ustack, ST_Node *root)
 					nextsates[i].insert(*CFT.root->lleft);
 				}
 			}
-			else                                                           //当前子式已得到CF范式
+			else                                                           
 			{
 				nextsates[i] = *(iter->form.loc[i]->cfnormal);
 			}
-		}//已得到每个子式的CF范式
-		for (int j = 1; j < formnum; j++)                     //求所有子式范式的交
+		}
+		for (int j = 1; j < formnum; j++)                    
 		{
 			constatestack(nextsates[0], nextsates[j]);
-		}//当前节点的CF范式（转移条件->下一个状态）
+		}
 
 		iter->explored = true;
 
-		int xstatenum = nextsates[0].size();    //下一个状态的个数
+		int xstatenum = nextsates[0].size();   
 		TGBA_vex *xstates;
 		xstates = new TGBA_vex[xstatenum];
 		int pioneernum = iter->num;
 		for (int k = 0; k < xstatenum; k++)
 		{
-			vector<TGBA_vex>::iterator newaddposi;        //新加入的状态位置，用于添加变迁
+			vector<TGBA_vex>::iterator newaddposi;       
 			set<string> transcond;
 			CreatState(nextsates[0].states[k], xstates[k], transcond);
 			AddState(xstates[k], newaddposi);
@@ -365,13 +363,11 @@ void TGBA::SimplifyStates()
 		{
 			if (isStateEqu(*iteri, *iterj))
 			{
-				//如果两个状态i，j等价，删除其中一个状态j和j所发出的所有迁移，
-				//并把指向j的所有迁移，指向其等价状态
-				//1.删除状态j所发出的所有迁移
+
 				deltransbypri(iterj->num);
-				//2.把指向j的所有迁移，指向其等价状态
+
 				modifytransbysuc(iterj->num, iteri->num);
-				//3.删除状态j	
+
 				iterj = states.erase(iterj);
 			}
 			else
@@ -379,7 +375,7 @@ void TGBA::SimplifyStates()
 		}
 	}
 }
-void TGBA::deltransbypri(int pri)                //删除pri发出的所有变迁
+void TGBA::deltransbypri(int pri)            
 {
 	vector<TGBA_arc>::iterator itertrans;
 	for (itertrans = transition.begin(); itertrans != transition.end();)
@@ -397,10 +393,10 @@ void TGBA::modifytransbysuc(int oldsuc, int newsuc)
 	vector<TGBA_arc>::iterator itertrans;
 	while (findtransitionbysuc(oldsuc, itertrans))
 	{
-		//检查重新指向newsuc是否会造成变迁冗余
+
 		vector<TGBA_arc>::iterator oldtrans;
 		findtransitionbyps(itertrans->pioneer, newsuc, oldtrans);
-		if (oldtrans == transition.end())  //表示没有迁移（oldsuc->pri, newsuc）
+		if (oldtrans == transition.end())  
 		{
 			itertrans->succeed = newsuc;
 			vector<TGBA_vex>::iterator pri;
@@ -408,7 +404,7 @@ void TGBA::modifytransbysuc(int oldsuc, int newsuc)
 			pri->nextvexset.erase(oldsuc);
 			pri->nextvexset.insert(newsuc);
 		}
-		else     //表示已有迁移oldtrans（oldsuc->pri, newsuc），需要判断冗余
+		else     
 		{
 			if (isAincludeB(oldtrans->transcondi, itertrans->transcondi) && isAincludeB(itertrans->label, oldtrans->label))     //旧迁移是冗余的
 			{

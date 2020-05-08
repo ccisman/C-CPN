@@ -21,13 +21,13 @@ bool array_compare(double *a1, double *a2, int n)
 	return true;
 }
 
-void array_copy(int *a1, int *a2, int n)//a1数组内容拷贝到a2中
+void array_copy(int *a1, int *a2, int n)
 {
 	for (int i = 0; i < n; i++)
 		a2[i] = a1[i];
 }
 
-void array_copy(double *a1, double *a2, int n)//a1数组内容拷贝到a2中
+void array_copy(double *a1, double *a2, int n)
 {
 	for (int i = 0; i < n; i++)
 		a2[i] = a1[i];
@@ -87,7 +87,7 @@ bool M::operator==(const M m1)
 		return false;
 }
 
-bool equal_M(vector<M> m1, vector<M> m2)//要求m1.m2的size一样
+bool equal_M(vector<M> m1, vector<M> m2)
 {
 	for (unsigned int i = 0; i < m1.size(); i++)
 	{
@@ -126,7 +126,7 @@ void occur_T(C_Petri &petri, string T)
 {
 	for (int i = 0; i < petri.arcnum; i++)
 	{
-		if (petri.arc[i].sourceP == true && petri.arc[i].V != "#" && petri.arc[i].V != "executed#"&&petri.arc[i].V != "relation")//隐式弧
+		if (petri.arc[i].sourceP == true && petri.arc[i].V != "#" && petri.arc[i].V != "executed#"&&petri.arc[i].V != "relation")//
 		{
 			if (petri.arc[i].target == T)
 			{
@@ -232,14 +232,7 @@ int RG::create_node(C_Petri petri, vector<string> T)
 	}
 	if (rgnode.size() > 0)
 	{
-		//死循环程序不考虑
-		//for (unsigned int i = 0; i < rgnode.size(); i++)
-		//{
-		//	if (equal_M(rgnode[i].m, temp_M))
-		//	{
-		//		return rgnode[i].num;
-		//	}
-		//}
+
 		RGNode node;
 		node.num = node_num++;
 		node.m = temp_M;
@@ -333,8 +326,8 @@ void print_RG(RG rg, string filename)
 {
 	ofstream fout;
 	fout.open(filename, ios::out);
-	fout << "可达图节点共有" << rg.node_num << "个" << endl;
-	fout << "如下所示" << endl;
+	fout << "there is " << rg.node_num << "nodes" << endl;
+	fout << "show them below:" << endl;
 	fout << endl;
 	for (int i = 0; i < rg.node_num; i++)
 	{
@@ -355,12 +348,10 @@ void print_RG(RG rg, string filename)
 		}
 		//cout << endl;
 		fout << endl;
-		//cout << "后继节点:";
-		fout << "后继节点:";
+		fout << "next node num:";
 		for (unsigned int j = 0; j < rg.rgnode[i].next.size(); j++)
 		{
-			//cout << rg.rgnode[i].next[j].num << "    经过变迁:" << rg.rgnode[i].next[j].T << "    ";
-			fout << rg.rgnode[i].next[j].num << "    经过变迁:" << rg.rgnode[i].next[j].T << "    ";
+			fout << rg.rgnode[i].next[j].num << "    throught transition :" << rg.rgnode[i].next[j].T << "    ";
 		}
 		//cout << endl;
 		fout << endl;

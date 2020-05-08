@@ -3,9 +3,9 @@
 
 typedef struct vex
 {
-	int num;                //顶点编号
-	bool explored = false;  //该节点是否已拓展过
-	formula_stack form;     //该节点所代表的子公式集合
+	int num;             
+	bool explored = false;  
+	formula_stack form;   
 	set<int> nextvexset;   //his successors
 }TGBA_vex;
 
@@ -32,8 +32,8 @@ class TGBA
 private:
 	vector<TGBA_vex> states;
 	vector<TGBA_arc> transition;
-	int statecounter;         //状态个数
-	int transcounter;         //变迁个数
+	int statecounter;         
+	int transcounter;        
 public:
 	TGBA();
 	void AssignID(TGBA_vex &ss);
@@ -52,6 +52,6 @@ public:
 	void fetchalltransbypri(int pri, vector<TGBA_arc> &transet);
 	//simplify-related functions:
 	void SimplifyStates();
-	void deltransbypri(int pri);                //删除pri发出的所有变迁
-	void modifytransbysuc(int oldsuc, int newsuc);     //将指向oldsuc的迁移重新指向newsuc，并修改发出该迁移的状态的nextvexset
+	void deltransbypri(int pri);                
+	void modifytransbysuc(int oldsuc, int newsuc);     
 };

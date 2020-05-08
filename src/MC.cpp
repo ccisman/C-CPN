@@ -20,13 +20,13 @@
 
 int model_check(C_Petri petri,RG rg,string filename1)
 {
-	//公式解析
-	char filename[100];  //C公式
-	//char filenameF[100]; //F公式
+
+	char filename[100]; 
+	//char filenameF[100]; 
 	strcpy(filename, filename1.c_str());
 
 	//***************************************************************
-	//C公式
+	//C formula
 	ifstream infile(filename, ios::in);
 	if (!infile)
 		return 0;
@@ -107,94 +107,12 @@ int model_check(C_Petri petri,RG rg,string filename1)
 		delete tba;
 
 
-		//生成交自动机 并搜索
 		Product_Automata *product = new Product_Automata;
 		product->ModelChecker(petri, rg, sba, propertyid);
 		delete product;
 	}
 
-	//***************************************************************
-	////F公式
-	//ifstream infileF(filenameF, ios::in);
-	//if (!infileF)
-	//	return 0;
-	//Reachability = false;
-	//convertf(filenameF);
-
-	//ifstream readF("formulaF.txt", ios::in);
-	//if (!readF) {
-	//	cout << "error!";
-	//	getchar();
-	//	exit(-1);
-	//}
-
-	//while (getline(readF, propertyid, ':')) {
-
-	//	cout << propertyid << ':';
-	//	getline(readF, S);
-	//	strcpy_s(form, S.c_str());
-	//	//cout << form << endl;
-	//	cout << endl;
-	//	//lexer
-	//	Lexer *lex = new Lexer(form, int(S.length()));
-	//	//syntax analysis
-	//	Syntax_Tree *ST;
-	//	ST = new Syntax_Tree;
-	//	formula_stack Ustack;
-	//	ST->reverse_polish(*lex);
-	//	ST->build_tree();
-	//	cout << "The syntax tree of unsimplified formula￡o" << endl;
-	//	ST->print_syntax_tree(ST->root, 0);
-	//	//LTL formula rewrite
-	//	ST->simplify_LTL(ST->root->left);
-	//	/*cout << endl;
-	//	cout << "The syntax tree of simplified formula￡o" << endl;
-	//	ST.print_syntax_tree(ST.root, 0);*/
-	//	//syntax tree convert
-	//	ST->negconvert(ST->root->left, Ustack);
-	//	delete lex;
-	//	/*cout << endl;
-	//	cout << "The converted formula￡o" << endl;
-	//	cout << ST.root->left->formula << endl;
-	//	cout << endl;*/
-	//	//ê?3?U×óê?
-	//	/*cout << "The subformulas of LTL whose main operator is \'U\'￡o" << endl;
-	//	vector<STNode>::iterator Uiter;
-	//	for (Uiter = Ustack.loc.begin(); Uiter != Ustack.loc.end(); Uiter++)
-	//	{
-	//		cout << (*Uiter)->formula << endl;
-	//	}
-	//	cout << endl;*/
-	//	//TGBA
-	//	TGBA *Tgba;
-	//	Tgba = new TGBA;
-	//	Tgba->CreatTGBA(Ustack, ST->root->left);
-	//	Tgba->SimplifyStates();
-	//	delete ST;
-	//	//cout << endl;
-	//	//11?ìTBA
-	//	TBA *tba;
-	//	tba = new TBA;
-	//	tba->CreatTBA(*Tgba, Ustack);
-	//	delete Tgba;
-	//	string filename = propertyid + ".txt";
-	//	tba->PrintBuchi(filename);
-	//	/*cout << "Please check the file" + filename + ". In this file you can see the Buchi automata related to the LTL formula!";
-	//	cout << endl;*/
-	//	//11?ìSBA
-	//	SBA sba;
-
-	//	sba.CreatSBA(*tba);
-	//	sba.Simplify();
-	//	sba.Compress();
-	//	delete tba;
-
-
-	//	//生成交自动机 并搜索
-	//	Product_Automata *product = new Product_Automata;
-	//	product->ModelChecker(petri, rg, sba, propertyid);
-	//	delete product;
-	//}
+	
 }
 
 void GetLTLC(C_Petri &petri, TiXmlElement *p, vector<string> &criteria)

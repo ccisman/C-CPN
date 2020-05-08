@@ -4498,7 +4498,6 @@ void type_add(gtree *p)
 		else
 			init_declarator = init_declarator_list->child->next->next;
 
-		//pointer不考虑因为别名不能是指针
 		while (init_declarator->type != IDENTIFIER)
 			init_declarator = init_declarator->child;
 		temp.origin_name = origin_name;

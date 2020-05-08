@@ -6,10 +6,10 @@
 #include<stack>
 #include<sstream>
 
+//CPN structure
 
 #include"tree.h"
 using namespace std;
-//有色Petri网的结构
 
 //const string colorset[] = { "int","char","float","double","short","long" };
 
@@ -21,15 +21,14 @@ public:
 	
 	static int total_num;
 
-	string source;//源的名称
-	string target;//目标的名称
-	string V;//记录弧上的变量
+	string source;
+	string target;
+	string V;
 	int id_num;
 	int sourceNum = 0;
 	int targetNum = 0;
-	bool sourceP;//false代表源节点是变迁
-	int type;//记录弧的类型，1代表只允许反向找,2代表正反都不允许,3代表只允许正向T->P,4代表只允许正向P->T，6代表while的回指弧
-//	int weight = 1;//记录弧上的权值
+	bool sourceP;
+	int type;
 
 	Arc(string s, string t, string v, bool s_P);
 };
@@ -40,30 +39,30 @@ class Place
 public:
 	int id_num;
 	static int total_num;
-	string name;//库所的名称（用于弧的标记）
-	string v_name;//用来存放变量库所的变量名
-	string str;//colorset为string或者char时存储值
-	int token_num;//token的个数
-	string colorset_tag;//对应colorset的数值
-	int *num;//colorset为整型时存储值
-	int n_num;//num数量
-	double *decimal;//colorset为小数时存储值
-	int n_decimal;//decimal数量
-	bool controlP;//区分控制库所还是变量库所
-	bool ispoint;//表示是否为指针
-	bool is_goto;//标识是否为goto
-	string goto_label;//标识goto语句的label
-	//int current;//表示当前位置，用于区分作用域
-	vector<string> false_exit;//循环语句假出口
+	string name;
+	string v_name;
+	string str;
+	int token_num;
+	string colorset_tag;
+	int *num;
+	int n_num;
+	double *decimal;
+	int n_decimal;
+	bool controlP;
+	bool ispoint;
+	bool is_goto;
+	string goto_label;
 
-	vector<string> enter;//标记开始变迁
-	vector<string> exit;//标记结尾变迁
-	vector<string> enter_P;//标记入口库所（包含函数调用的语句入口库所为()库所)
-	vector<string> control_T;//标记库所对应的控制变迁
-	vector<string> call_P;//函数begin库所中包含所有调用它的库所
-	vector<string> label_after_P;//标签库所特有，记录上下文
-	string fun_P;//存放所在函数的begin库所
-	bool global;//全局变量标志
+	vector<string> false_exit;
+
+	vector<string> enter;
+	vector<string> exit;
+	vector<string> enter_P;
+	vector<string> control_T;
+	vector<string> call_P;
+	vector<string> label_after_P;
+	string fun_P;
+	bool global;
 	string pre_executed_P;
 
 public:
@@ -79,14 +78,13 @@ public:
 	
 	static int total_num;
 
-	string name;//变迁的名称（用于弧的标记）
-	string booleanExpression;//控制哨用字符串存储bool表达式
-	string v_Expression;//变量哨存放变量表达式
-//	int num = 0;
+	string name;
+	string booleanExpression;
+	string v_Expression;
+
 	int id_num;
 	int current_P_num;
-	bool controlT;//区分控制哨还是变量哨
-	//bool TorF;//控制哨的值
+	bool controlT;
 
 	Transition(string n, bool c_T, int current_P_num);
 	void set_C_Transition_value(string str);
@@ -96,14 +94,14 @@ public:
 class C_Petri
 {
 public:
-	int p_num;//库所个数
-	int t_num;//变迁个数
-	int arcnum;//弧个数
+	int p_num;
+	int t_num;
+	int arcnum;
 
 
-	vector<Place> place;//库所
-	vector<Transition> transition;//变迁
-	vector<Arc> arc;//弧
+	vector<Place> place;
+	vector<Transition> transition;
+	vector<Arc> arc;
 
 
 public:
@@ -128,15 +126,15 @@ public:
 	void Add_Arc(Arc a);
 	void Add_Arc(string source, string target, string V, bool sourceP);
 
-	string find_place(string t_name, string V);//通过变迁和弧上的变量值找到对应库所,返回库所name
+	string find_place(string t_name, string V);
 
 	bool Add_Place_enter(string name, string s);
 	bool Add_Place_enter(string name, vector<string> s);
 	bool Add_Place_exit(string name, string s);
 	bool Add_Place_exit(string name, vector<string> s);
 	//	bool Add_Place_controlT(string name, vector<string> s);
-	bool is_enable(string t);//判断变迁t是否可发生
-	bool guard(string booleanExpression, string T); //guard函数的处理
+	bool is_enable(string t);
+	bool guard(string booleanExpression, string T); 
 	//bool guard_process(string booleanExpression, string T);
 	string Delete_Arc(int i);
 	string Delete_Arc(string source, string target);
@@ -147,8 +145,8 @@ public:
 	vector<string> get_exit(string name);
 
 	//	vector<string> get_controlT(string name);
-	vector<string> enable_T(); //返回网内所有可发生的变迁
-	vector<string> find_all_place(string t_name);//找变迁的所有前驱库所
+	vector<string> enable_T(); 
+	vector<string> find_all_place(string t_name);
 
 	int get_current_P_num(string T);
 	void set_point_flag(string p_name);
@@ -188,11 +186,11 @@ void SplitString(const string& s, vector<string>& v, const string& c);
 
 void splitExpression(string &s, vector<string>& v);
 
-void ast_to_cpn(C_Petri &petri, gtree *p, int addition);//addition为0表示直接构建，其余表示程序变化时构建
+void ast_to_cpn(C_Petri &petri, gtree *p, int addition);
 
 void reset_gen_cpn();
 
-void process_label(C_Petri &petri);//处理标签语句
+void process_label(C_Petri &petri);
 
 string find_P_name(C_Petri petri, string v_name);
 

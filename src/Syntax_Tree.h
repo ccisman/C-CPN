@@ -1,5 +1,5 @@
 #pragma once
-/*语法分析器*/
+
 #include"Data_Structures.h"
 using namespace std;
 
@@ -19,18 +19,18 @@ class Syntax_Tree
 {
 public:
 	ST_Node *root;
-	list_stack Operator;            //操作符栈
-	list_stack Operand;            //操作数栈
+	list_stack Operator;           
+	list_stack Operand;         
 public:
 	Syntax_Tree();
 	void reverse_polish(Lexer lex);
-	void build_tree();             //建立整棵语法树
+	void build_tree();             
 	void convert(ST_Node *T, formula_stack &Ustack);
 	void negconvert(ST_Node *T, formula_stack &Ustack);
 	void print_reverse_polish();
 	void print_syntax_tree(ST_Node *T, int n);
 	void print_state_stack(ST_Node *T, int n);
-	void simplify_LTL(ST_Node *T);                                        //化简LTL公式
+	void simplify_LTL(ST_Node *T);                                     
 	bool isTreeEqu(ST_Node *T1, ST_Node *T2);
 };
 

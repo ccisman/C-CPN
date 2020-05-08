@@ -22,7 +22,7 @@ using namespace std;
 extern string rg_dirname, rg_sliceOnly_dirname, origin_dirname, newfile_dirname;
 int sort_num = 0;
 int gen_sel_num, gen_iter_num, gen_jump_num, gen_fun_num;
-vector<aka> type_array;//±ğÃû±í
+vector<aka> type_array;
 
 string gen_sel()
 {
@@ -67,7 +67,7 @@ bool judge_call_postfix_expression(gtree *postfix_expression)
 		return false;
 }
 
-bool judge_call_statement(gtree *statement1)//ÅĞ¶Ïstatement1¶ÔÓ¦µÄÊÇº¯Êıµ÷ÓÃÓï¾ä
+bool judge_call_statement(gtree *statement1)
 {
 	if (statement1->child!=NULL && statement1->child->type == EXPRESSION_STATEMENT && statement1->child->child->type == EXPRESSION 
 		&& statement1->child->child->child->type == ASSIGNMENT_EXPRESSION && statement1->child->child->child->child->type == CONDITIONAL_EXPRESSION)
@@ -81,7 +81,7 @@ bool judge_call_statement(gtree *statement1)//ÅĞ¶Ïstatement1¶ÔÓ¦µÄÊÇº¯Êıµ÷ÓÃÓï¾ä
 	return false;
 }
 
-bool judge_label_statement(gtree *statement1)//ÅĞ¶Ïstatement1¶ÔÓ¦µÄÊÇ±êÇ©Óï¾ä
+bool judge_label_statement(gtree *statement1)
 {
 	if (statement1->type == STATEMENT && statement1->child->type == LABELED_STATEMENT)
 	{
@@ -131,7 +131,7 @@ bool judge_inside_compound_statement(gtree *statement1)//
 	return true;
 }
 
-void TraverseTree2(gtree *p)//¶Ô±í´ïÊ½½øĞĞ²Ù×÷
+void TraverseTree2(gtree *p)
 {
 	if (p == NULL)return;
 	if (p->type == COMPOUND_STATEMENT)
@@ -226,7 +226,7 @@ void TraverseTree2(gtree *p)//¶Ô±í´ïÊ½½øĞĞ²Ù×÷
 		else if (p->child->place == "volatile")
 			p->place = "v";
 	}
-	else if (p->type == FUNCTION_DEFINITION)//function_definitionµÄplaceÖµÎªº¯ÊıÃû
+	else if (p->type == FUNCTION_DEFINITION)
 	{
 		gtree *temp;
 		if (p->child->type == DECLARATION_SPECIFIERS)
@@ -243,7 +243,7 @@ void TraverseTree2(gtree *p)//¶Ô±í´ïÊ½½øĞĞ²Ù×÷
 			temp = temp->child;
 		p->place = temp->place;
 	}
-	else if (p->type == POSTFIX_EXPRESSION && judge_call_postfix_expression(p))//postfix_expressionÎªº¯Êıµ÷ÓÃ£¬ÔòplaceÎªº¯ÊıÃû_v
+	else if (p->type == POSTFIX_EXPRESSION && judge_call_postfix_expression(p))
 	{
 		if (p->place=="postfix_expression")
 			p->place = p->child->child->place + "_v";
@@ -253,18 +253,7 @@ void TraverseTree2(gtree *p)//¶Ô±í´ïÊ½½øĞĞ²Ù×÷
 			statement = statement->parent;
 		statement->contain_call_flag = true;
 		statement->contain_call = p->child->child->place;
-		/*gtree *assignment_expression = NULL , *statement = p;
-		while (statement->type != STATEMENT)
-		{
-			if (statement->type == ASSIGNMENT_EXPRESSION && assignment_expression == NULL)
-				assignment_expression = statement;
-			statement = statement->parent;
-		}
-		if (assignment_expression->parent->type != ASSIGNMENT_EXPRESSION)
-			p->place = p->child->child->place + "_call";
-		else
-			p->place = p->child->child->place + "_v";
-		statement->place = p->place;*/
+
 	}
 	else if (p->type == STATEMENT)
 	{
@@ -329,7 +318,7 @@ void reset_gen_ast()
 	sort_num = 0;
 }
 
-gtree *&create_tree(string filename, bool pre_process_flag)//flagÎªtrue´ú±íĞèÒªÔ¤´¦Àí
+gtree *&create_tree(string filename, bool pre_process_flag)
 {
 	reset_gen_ast();
 	if (pre_process_flag == true)
@@ -342,7 +331,7 @@ gtree *&create_tree(string filename, bool pre_process_flag)//flagÎªtrue´ú±íĞèÒªÔ
 		fin.open(origin_dirname + filename, ios::in);
 		if (!fin.is_open())
 		{
-			cout << filename << "ÎÄ¼ş²»´æÔÚ" << endl;
+			cout << filename << " not exist" << endl;
 			exit(1);
 		}
 		string temp_s;
@@ -351,11 +340,7 @@ gtree *&create_tree(string filename, bool pre_process_flag)//flagÎªtrue´ú±íĞèÒªÔ
 		fin.close();
 		pre_process(temp_s);
 		fout.open(whole_filename1, ios::out);
-		/*if (!fout.is_open())
-		{
-			cout << filename << "ÎÄ¼ş²»´æÔÚ" << endl;
-			exit(1);
-		}*/
+
 		fout << temp_s;
 		fout.close();
 
@@ -364,7 +349,7 @@ gtree *&create_tree(string filename, bool pre_process_flag)//flagÎªtrue´ú±íĞèÒªÔ
 			yyin = fp;
 		else
 		{
-			cout << filename1 << "ÎÄ¼ş²»´æÔÚ" << endl;
+			cout << filename1 << " not exist" << endl;
 			exit(1);
 		}
 
@@ -377,7 +362,7 @@ gtree *&create_tree(string filename, bool pre_process_flag)//flagÎªtrue´ú±íĞèÒªÔ
 			yyin = fp;
 		else
 		{
-			cout << filename << "ÎÄ¼ş²»´æÔÚ" << endl;
+			cout << filename << " not exist" << endl;
 			exit(1);
 		}
 	}
@@ -391,7 +376,7 @@ gtree *&create_tree(string filename, bool pre_process_flag)//flagÎªtrue´ú±íĞèÒªÔ
 	return head;
 }
 
-void Traverse(gtree *p)//²âÊÔº¯Êı
+void Traverse(gtree *p)
 {
 	if (p == NULL) return;
 	if (p->type == FUNCTION_DEFINITION)
